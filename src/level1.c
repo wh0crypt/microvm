@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 uint8_t program[] = {
     1, 'H',
@@ -48,7 +49,7 @@ void run(uint8_t* program)
                 break;
             default:
                 fprintf(stderr, "error: unknown opcode '0x%02x' at '0x%02x'\n", opcode, pc);
-                return;
+                exit(1);
         }
 
         pc += 2;
