@@ -54,24 +54,30 @@ int main()
 }
 
 #define ASSERT_STACK_FULL()                         \
-    do {                                            \
-        if (sp >= 255) {                            \
+    do                                              \
+    {                                               \
+        if (sp >= 255)                              \
+        {                                           \
             fprintf(stderr, "error: stack full\n"); \
             return;                                 \
         }                                           \
     } while (0)
 
 #define ASSERT_STACK_EMPTY()                            \
-    do {                                                \
-        if (sp <= 0) {                                  \
+    do                                                  \
+    {                                                   \
+        if (sp <= 0)                                    \
+        {                                               \
             fprintf(stderr, "error: stack empty\n");    \
             return;                                     \
         }                                               \
     } while (0)
 
 #define ASSERT_PC_OUTBOUND(pc, len)                                                     \
-    do {                                                                                \
-        if (pc >= len) {                                                                \
+    do                                                                                  \
+    {                                                                                   \
+        if (pc >= len)                                                                  \
+        {                                                                               \
             fprintf(stderr, "error: pc value '%02x' out-of-bounds (%02x)\n", pc, len);  \
             return;                                                                     \
         }                                                                               \
@@ -136,9 +142,7 @@ void run(Program* program)
                     val1 = program->program[pc + 1];
                     ASSERT_PC_OUTBOUND(val1, program->size);
                     pc = val1;
-                } else {
-                    pc += 2;
-                }
+                } else pc += 2;
                 break;
             default:
                 fprintf(stderr, "error: unknown opcode '0x%02x' at '0x%02x'\n", opcode, pc);

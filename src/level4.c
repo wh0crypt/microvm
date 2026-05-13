@@ -63,24 +63,30 @@ int main()
 }
 
 #define ASSERT_TAPE_FULL()                          \
-    do {                                            \
-        if (dp >= 255) {                            \
+    do                                              \
+    {                                               \
+        if (dp >= 255)                              \
+        {                                           \
             fprintf(stderr, "error: tape full\n");  \
             return;                                 \
         }                                           \
     } while (0)
 
 #define ASSERT_TAPE_EMPTY()                             \
-    do {                                                \
-        if (dp <= 0) {                                  \
+    do                                                  \
+    {                                                   \
+        if (dp <= 0)                                    \
+        {                                               \
             fprintf(stderr, "error: tape empty\n");     \
             return;                                     \
         }                                               \
     } while (0)
 
 #define ASSERT_PC_OUTBOUND(pc, len)                                                     \
-    do {                                                                                \
-        if (pc >= len) {                                                                \
+    do                                                                                  \
+    {                                                                                   \
+        if (pc >= len)                                                                  \
+        {                                                                               \
             fprintf(stderr, "error: pc value '%02x' out-of-bounds (%02x)\n", pc, len);  \
             return;                                                                     \
         }                                                                               \
@@ -132,18 +138,16 @@ void run(Program* program)
                 {
                     ASSERT_PC_OUTBOUND(pc + 1, program->size);
                     pc = program->program[pc + 1];
-                } else {
-                    pc += 2;
                 }
+                else pc += 2;
                 break;
             case JUMP_IF_NOT_ZERO:
                 if (tape[dp] != 0)
                 {
                     ASSERT_PC_OUTBOUND(pc + 1, program->size);
                     pc = program->program[pc + 1];
-                } else {
-                    pc += 2;
                 }
+                else pc += 2;
                 break;
             default:
                 fprintf(stderr, "error: unknown opcode '0x%02x' at '0x%02x'\n", opcode, pc);

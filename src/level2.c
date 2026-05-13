@@ -41,16 +41,20 @@ int main()
 }
 
 #define ASSERT_STACK_FULL()                         \
-    do {                                            \
-        if (sp >= 255) {                            \
+    do                                              \
+    {                                               \
+        if (sp >= 255)                              \
+        {                                           \
             fprintf(stderr, "error: stack full\n"); \
             return;                                 \
         }                                           \
     } while (0)
 
 #define ASSERT_STACK_EMPTY()                            \
-    do {                                                \
-        if (sp <= 0) {                                  \
+    do                                                  \
+    {                                                   \
+        if (sp <= 0)                                    \
+        {                                               \
             fprintf(stderr, "error: stack empty\n");    \
             return;                                     \
         }                                               \
