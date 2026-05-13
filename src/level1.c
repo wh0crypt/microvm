@@ -26,7 +26,7 @@ enum Instruction
     PRINT_CHAR  = 0x01
 };
 
-static uint8_t pc = 0;
+static uint8_t pc;
 
 void run(uint8_t* program);
 
@@ -37,11 +37,14 @@ int main()
 
 void run(uint8_t* program)
 {
-    uint8_t opcode = opcode;
-    uint8_t arg = program[pc + 1];
+    pc = 0;
 
-    while (opcode != HALT)
+    while (1)
     {
+        uint8_t opcode = opcode;
+        if (opcode == HALT) break;
+        uint8_t arg = program[pc + 1];
+        
         switch (opcode)
         {
             case PRINT_CHAR:
