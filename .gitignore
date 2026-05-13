@@ -1,0 +1,21 @@
+# Ignore everything
+**/**
+
+# Do not ignore .gitignore file
+!.gitignore
+
+# Do not ignore source files nor headers
+!*.c
+!*.h
+
+# Do not ignore config files
+!CMakeLists.txt
+!*.py
+!*.sh
+
+# Do not ignore subdirs
+!*/
+
+# Do not ignore docs
+!README.md
+!LICENSE
