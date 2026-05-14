@@ -16,6 +16,9 @@
 # Do not ignore subdirs
 !*/
 
+#Ignore build dir
+build/
+
 # Do not ignore docs
 !README.md
 !LICENSE
