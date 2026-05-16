@@ -25,7 +25,7 @@ typedef enum
     READ                = 0x06,
     JUMP_IF_ZERO        = 0x07,
     JUMP_IF_NOT_ZERO    = 0x08,
-    UNK                 = 0xFF
+    INV                 = 0xFF
 } OpCodes;
 
 
@@ -150,9 +150,7 @@ void run(Program* program)
                 }
                 else ++pc;
                 break;
-            default:
-                fprintf(stderr, "error: unknown opcode '0x%02x' at '0x%02lx'\n", opcode, pc);
-                exit(1);
+            default: ++pc;
         }
     }
 }
@@ -169,7 +167,7 @@ uint8_t get_op_from_char(char c)
         case ',':   return READ;
         case '[':   return JUMP_IF_ZERO;
         case ']':   return JUMP_IF_NOT_ZERO;
-        default:    return UNK;
+        default:    return INV;
     }
 }
 
