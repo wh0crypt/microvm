@@ -211,17 +211,16 @@ void build_mapping_table(Program* program)
 
 Program create_prog_from_file(char* filename)
 {
-    Program prog = {"", 0};
-    
     FILE* fp = fopen(filename, "r");
     if (fp == NULL)
     {
         fprintf(stderr, "error: file '%s' cannot be opened.\n", filename);
-        return prog;
+        exit(1);
     }
     
     char content[MAX_PROG_LEN];
     fgets(content, MAX_PROG_LEN, fp);
+    Program prog;
     memcpy(prog.program, content, strlen(content) * sizeof(char));
     prog.len = strlen(content);
     return prog;
