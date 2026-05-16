@@ -4,10 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+#define MAX_PROG_LEN 4096
+
+
 typedef struct
 {
     char*   program;
-    size_t  size;
+    size_t  len;
 } Program;
 
 typedef enum
@@ -24,11 +28,13 @@ typedef enum
     UNK                 = 0xFF
 } OpCodes;
 
+
 static size_t pc;
 static int    dp;
 
-uint8_t tape[256];
+
 size_t  match[256];
+
 
 void run(Program* program);
 uint8_t get_op_from_char(char c);
@@ -36,6 +42,7 @@ void build_mapping_table(Program* program);
 Program create_prog_from_file(char* filename);
 void show_usage();
 void show_help();
+
 
 int main(int argc, char* argv[])
 {
@@ -47,15 +54,21 @@ int main(int argc, char* argv[])
 
     if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help"))
     {
-        show_usage(); // TODO: change to an actual help message
+        printf("to be implemented\n"); // TODO: change to an actual help message
         return 0;
     }
 
-    Program p = create_prog_from_file(argv[1]);
-    run(&p);
+    Program p = create_prog_from_file(argv[0]);
+    if (p.len == 0)
+    {
+        fprintf(stderr, "error: program is empty\n");
+        return 1;
+    }
 
+    run(&p);
     return 0;
 }
+
 
 #define ASSERT_TAPE_FULL()                          \
     do                                              \
@@ -88,10 +101,11 @@ int main(int argc, char* argv[])
 
 void run(Program* program)
 {
+    uint8_t tape[MAX_PROG_LEN];
     pc = 0; dp = 0;
     build_mapping_table(program);
 
-    while (pc < program->size)
+    while (pc < program->len)
     {
         uint8_t opcode = get_op_from_char(program->program[pc]);
         if (opcode == HALT) break;
@@ -117,13 +131,13 @@ void run(Program* program)
                 ++pc;
                 break;
             case READ:
-                tape[dp] = getchar();
+                tape[dp] = (uint8_t) getchar();
                 ++pc;
                 break;
             case JUMP_IF_ZERO:
                 if (tape[dp] == 0)
                 {
-                    ASSERT_PC_OUTBOUND(match[pc] + 1, program->size);
+                    ASSERT_PC_OUTBOUND(match[pc] + 1, program->len);
                     pc = match[pc] + 1;
                 }
                 else ++pc;
@@ -131,7 +145,7 @@ void run(Program* program)
             case JUMP_IF_NOT_ZERO:
                 if (tape[dp] != 0)
                 {
-                    ASSERT_PC_OUTBOUND(match[pc] + 1, program->size);
+                    ASSERT_PC_OUTBOUND(match[pc] + 1, program->len);
                     pc = match[pc] + 1;
                 }
                 else ++pc;
@@ -163,9 +177,9 @@ void build_mapping_table(Program* program)
 {
     size_t last_open = 0;
     size_t depth = 0;
-    size_t opens[program->size];
+    size_t opens[program->len];
 
-    for (size_t i = 0; i < program->size; ++i)
+    for (size_t i = 0; i < program->len; ++i)
     {
         if (program->program[i] == '[')
         {
@@ -206,11 +220,10 @@ Program create_prog_from_file(char* filename)
         return prog;
     }
     
-    char content[4096];
-    fgets(content, 4096, fp);
-    prog.program = content;
-    prog.size = strlen(content);
-
+    char content[MAX_PROG_LEN];
+    fgets(content, MAX_PROG_LEN, fp);
+    memcpy(prog.program, content, strlen(content) * sizeof(char));
+    prog.len = strlen(content);
     return prog;
 }
 
